@@ -10,7 +10,7 @@ const { text } = bodyParser;
 
 const router = Router();
 const app = express();
-const port = process.env.PORT || 3065;
+const port = process.env.VITE_PORT || 3065;
 
 app.use(text({type:"*/*"}));
 
@@ -32,11 +32,11 @@ const apiBasePath = '/api';
 app.use(apiBasePath, router);
 
 const readJson = (reqPath, callback) => {
-  const path = `.${apiBasePath}/${reqPath}.json`;
+  const path = `.${apiBasePath}${reqPath}.json`;
 
   readFile(path, (err, data) => {
     if (err) {
-      callback(false);
+      console.error(err)
     }
 
     if (data) {
@@ -47,76 +47,18 @@ const readJson = (reqPath, callback) => {
   });
 }
 
-const trim = (str, chars = [], direction = 0) => {
-  let result = str;
-  if (direction == 0 || direction == 1) {
-    while (chars.includes(result.charAt(0))) {
-      result = result.substring(1);
-    }
-  }
-
-  if (direction == 0 || direction == 2) {
-    while (chars.includes(result.charAt(result.length - 1))) {
-      result = result.substring(0, result.length - 1);
-    }
-  }
-
-  return result;
-}
-
 router.get(/.*/, (req, res) => {
-  const reqPath = trim(req.path, ['/'], 2);
-  const method = trim(req.path, ['/']).replace('/','_');
+  const reqPath = req.path;
+
   readJson(reqPath, (parsedData) => {
-    if (parsedData !== false) {
-      res.send(parsedData);
-    } else {
-      if (methods[method]) {
-        const parsedData = methods[method]();
-        if (parsedData) {
-          res.send(parsedData);
-          return;
-        }
-      }
-      res.status(500).send({error: true});
-    }
+    res.send(parsedData);
   });
 });
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
-
-const apartments_cnt = () => {
-  let cnt = getRandomInt(100);
-  if (cnt < 20) {
-    cnt = 0;
-  }
-  return {
-    'cnt':  cnt,
-    'text' : cnt == 0 ? 'Not found' : `Search ${cnt} items`,
-  }
-}
-
-const methods = {
-  apartments_cnt,
-};
-
 router.post(/.*/, (req, res) => {
-  const reqPath = trim(req.path, ['/'], 2);
-  const method = trim(req.path, ['/']).replace('/','_');
+  const reqPath = req.path;
+
   readJson(reqPath, (parsedData) => {
-    if (parsedData !== false) {
-      res.send(parsedData);
-    } else {
-      if (methods[method]) {
-        const parsedData = methods[method]();
-        if (parsedData) {
-          res.send(parsedData);
-          return;
-        }
-      }
-      res.status(500).send({error: true});
-    }
+    res.send(parsedData);
   });
 });
