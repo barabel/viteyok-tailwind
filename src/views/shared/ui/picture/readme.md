@@ -12,8 +12,8 @@
 - title: string, тайтл для картинки
 - noLazy: boolean, флаг отмены ленивой загрузки
 
-#### Модификаторы:
---contain: к изображению применяется стиль object-fit: contain;
+#### variant
+- contain - добавит object-fit: contain
 
 #### Пример данных:
 ```

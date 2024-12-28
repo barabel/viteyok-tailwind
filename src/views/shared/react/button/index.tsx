@@ -1,1 +1,2 @@
-export { ReactButton, type TReactButton } from './ui';
+export { ReactButton } from './ui';
+export { ReactButtonClose } from './ui/close'

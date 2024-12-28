@@ -1,31 +1,46 @@
-import { lazy, useEffect, useState } from 'react';
+import { lazy, useEffect, useState, useCallback } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { PopupsContainer } from './popups-container';
-import PopupErrorFallback from '@/widgets/popups/variant/error-fallback';
-import { ScrollLock } from '@/shared/lib/scroll';
 import { emitEvent } from '@/shared/helpers/emitEvent';
-import { type PopupComponentType, type PopupComponent } from '@/shared/lib/popups/types';
-
-import './popups.scss';
-
-const popups: Record<string, any> = {
-  error: lazy(() => import("../variant/error")),
-  'error-fallback': lazy(() => import("../variant/error-fallback")),
-  message: lazy(() => import("../variant/message")),
-}
+import { ScrollLock } from '@/shared/lib/scroll';
+import PopupError from '@/widgets/popups/ui/variant/error';
 
 const bodyScrollLock = new ScrollLock();
-
-const decidePopupType = (variant?: PopupComponent['variant']): PopupComponentType => {
-  if (variant === 'location') {
-    return 'backdrop';
+export interface PopupComponent {
+  variant: string
+  data?: object & {
+    isCloseAll?: boolean
+    [x: string]: any
   }
+  callbackFunc?: () => void
 
-  return ''
 }
+
+const popups: Record<string, any> = {
+  error: lazy(() => import("./variant/error")),
+  message: lazy(() => import("./variant/message")),
+  video: lazy(() => import("./variant/video")),
+}
+
 
 export const Popups: FCClass = () => {
   const [popupList, setPopupList] = useState<PopupComponent[]>([]);
+
+  const openPopup = (data: PopupComponent): void => {
+    setPopupList((popupList) => {
+      return [...popupList, {
+        ...data,
+      }];
+    });
+  }
+
+  const closePopup = useCallback(() => {
+    setPopupList((prevList) => prevList.slice(0, -1));
+  }, []);
+
+  const closeAllPopups = useCallback(() => {
+    setPopupList([]);
+  }, []);
 
   useEffect(() => {
     const listenerOpen = (event: CustomEvent<PopupComponent>): void => {
@@ -67,27 +82,7 @@ export const Popups: FCClass = () => {
       window.removeEventListener('keydown', closeOnEscape);
       window.removeEventListener('modalClose', listenerClose);
     }
-  }, [popupList]);
-
-  const openPopup = (data: PopupComponent): void => {
-    setPopupList((popupList) => {
-      return [...popupList, {
-        ...data,
-      }];
-    });
-  }
-
-  const closePopup = (): void => {
-    setPopupList((popupList) => {
-      return popupList.slice(0, -1);
-    });
-  }
-
-  const closeAllPopups = (): void => {
-    setPopupList(() => {
-      return [];
-    });
-  };
+  }, [popupList, closePopup]);
 
   return (
     popupList.map((popup, index) => {
@@ -99,10 +94,9 @@ export const Popups: FCClass = () => {
           fallback={
             <PopupsContainer
               index={index}
-              LazyPopup={PopupErrorFallback}
+              LazyPopup={() => <PopupError title={'ошибка модального окна'} isFallBack closePopup={closePopup}/>}
               closePopup={closePopup}
               closeAllPopups={closeAllPopups}
-              variant='error-fallback'
             />
           }
         >
@@ -111,8 +105,8 @@ export const Popups: FCClass = () => {
             LazyPopup={LazyPopup}
             closePopup={closePopup}
             closeAllPopups={closeAllPopups}
-            variant={popup.variant}
-            popupType={decidePopupType(popup.variant)}
+            isCloseAll={popup?.data?.isCloseAll}
+            callbackFunc={popup?.callbackFunc}
             {...popup.data}
           />
         </ErrorBoundary>

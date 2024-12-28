@@ -52,9 +52,12 @@ const func = (id, tokens) => {
 
     _.each(parsedTokens, processToken);
 
-    const output = [
-        `Twig.twig({id: ${JSON.stringify(id)}, data: ${JSON.stringify(parsedTokens)}, precompiled: true, allowInlineIncludes: true, rethrow: true, });\n`,
-    ];
+    let output = [];
+
+    if (!mapcache.get('component_'+id)) {
+        mapcache.set('component_'+id, true);
+        output.push(`Twig.twig({id: ${JSON.stringify(id)}, data: ${JSON.stringify(parsedTokens)}, precompiled: true, allowInlineIncludes: true, rethrow: true, });\n`,);
+    }
 
     if (includes.length > 0) {
         _.each(_.uniq(includes), (file) => {

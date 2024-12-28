@@ -1,12 +1,7 @@
-import { initPopup } from '@/widgets/popups';
+import { InitPopups } from '@/widgets/popups';
 import { saveUTM } from '@/shared/helpers/saveUTM';
-import { setAllAnimations } from '@/shared/lib/animations';
 
-// Рут для попапов
-const popups = document.getElementById('popups');
-if (popups) {
-  initPopup(popups);
-}
+new InitPopups();
 
 // Записывает utm-метки в сессию
 try {
@@ -15,8 +10,4 @@ try {
   }
 } catch (e) {
   console.error(e);
-}
-
-window.onload = () => {
-  setAllAnimations();
 }

@@ -1,10 +1,7 @@
-# Viteyok
+# Viteyok-tailwind
 
-Фронтенд окружение на twig, ts, scss со сборщиком vite
+Фронтенд окружение на twig, ts, scss с tailwind, со сборщиком vite
 
-TODO:
-
-[ ] - что-то сделать с twigtojs
 
 ## Файловая структура проекта
 
@@ -42,6 +39,7 @@ TODO:
 ├── app.ts                                 # базовые функции для конфига vite
 ├── global.d.ts                            # типы для ts
 ├── server.ts                              # локальный сервер для имитации запросов по /api
+├── tailwind.config.js                     # конфигурационный файл tailwind
 └── vite.config.ts                         # конфигурационный файл vitejs
 ```
 
