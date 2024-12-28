@@ -18,7 +18,8 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/*": ["src/views/*"]
+      "@/*": ["src/views/*"],
+      "~/*": ["./*"]
     },
     "forceConsistentCasingInFileNames": true,
   },

@@ -5,6 +5,7 @@ import path from 'node:path';
 import IconSpritePlugin from './plugins/vite-plugin-icon-sprite';
 import { getFileName, getGlobalData, twigJSParams } from './app';
 import twigToJS from 'vite-plugin-twig-drupal';
+import tailwindcss from '@vituum/vite-plugin-tailwindcss';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
@@ -30,6 +31,7 @@ export default defineConfig(({ mode }) => {
       twigToJS({
         ...twigJSParams,
       }),
+      tailwindcss(),
     ],
     publicDir: 'static',
     server: {

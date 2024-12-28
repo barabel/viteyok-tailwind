@@ -1,15 +1,20 @@
-import { type MouseEventHandler, Suspense, useEffect, useRef, useState } from 'react';
-import { type TPopupChild, type PopupComponentType, type PopupComponent } from '@/shared/lib/popups/types';
+import { type MouseEventHandler, Suspense, useEffect, useRef, useState, useCallback } from 'react';
 import cn from 'classnames';
+import type { TPopupChild } from '@/shared/lib/popups/types';
+
+enum VariantsStyles {
+  hidden = 'invisible opacity-0 pointer-events-none',
+  appearing = 'visible opacity-1 pointer-events-auto *:translate-x-0',
+}
 
 export interface TPopupsContainer {
   LazyPopup: TPopupChild
   index: number
   closePopup: () => void
   closeAllPopups: () => void
-  popupType?: PopupComponentType
   isCloseAll?: boolean
-  variant: PopupComponent['variant']
+  isBelow?: boolean
+  callbackFunc?: () => void
 }
 
 export const PopupsContainer: FCClass<TPopupsContainer> = ({
@@ -18,7 +23,7 @@ export const PopupsContainer: FCClass<TPopupsContainer> = ({
   closePopup,
   closeAllPopups,
   isCloseAll = false,
-  popupType = '',
+  callbackFunc,
   ...props
 }) => {
   const popups = useRef(null);
@@ -35,47 +40,43 @@ export const PopupsContainer: FCClass<TPopupsContainer> = ({
 
     window.addEventListener('closePopup', handleCloseEvent);
 
-    setTimeout(() => {
+    const appearanceTimeout = setTimeout(() => {
       setAppearing(true);
     }, 10);
 
     return () => {
       clearTimeout(timerRef.current);
+      clearTimeout(appearanceTimeout);
       window.removeEventListener('closePopup', handleCloseEvent);
     }
-  }, []);
+  }, [index]);
 
-  const closeCurrentPopup = (): void => {
-    if (isCloseAll) {
-      closeAllPopups();
-    } else {
-      setAppearing(false);
+  const closeCurrentPopup = useCallback(() => {
+    setAppearing(false);
 
-      timerRef.current = setTimeout(() => {
-        closePopup();
-      }, durationClose);
+    if (callbackFunc) {
+      callbackFunc();
     }
-  }
 
-  const closeByOverlayClick: MouseEventHandler<HTMLDivElement> = (event) => {
+    timerRef.current = setTimeout(() => {
+      isCloseAll ? closeAllPopups() : closePopup();
+    }, durationClose);
+  }, [isCloseAll, closeAllPopups, closePopup]);
+
+  const closeByOverlayClick: MouseEventHandler<HTMLDivElement> = useCallback((event) => {
     if (event.target === popups.current) {
       closeCurrentPopup();
     }
-  }
+  }, [closeCurrentPopup])
 
   return (
-    <div
-      ref={popups}
-      className={cn(
-        'popups',
-        {
-          'popups--appearing': isAppearing,
-          [`popups--${popupType}`]: popupType,
-        },
-      )}
-      onClick={closeByOverlayClick}
-    >
-      <div className='popups__wrapper'>
+    <div ref={popups} className={cn('fixed inset-0 h-dvh bg-black-100-60 flex flex-col z-popup ' +
+      'justify-center items-center  pointer-events-none t:p-16 transition', {
+      [VariantsStyles.hidden]: !isAppearing,
+      [VariantsStyles.appearing]: isAppearing,
+    })} onClick={closeByOverlayClick}>
+      <div className={'w-fit bg-white-100 relative z-1 translate-x-full ' +
+        't:flex t:items-center t:justify-center t:bg-transparent t:transform-none'}>
         <Suspense fallback={<></>}>
           <LazyPopup
             closePopup={closeCurrentPopup}
@@ -85,4 +86,4 @@ export const PopupsContainer: FCClass<TPopupsContainer> = ({
       </div>
     </div>
   );
-}
+};

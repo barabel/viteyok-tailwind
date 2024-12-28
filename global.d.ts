@@ -1,10 +1,7 @@
 declare global {
-  type FCClass<P = object> = React.FC<
-  P &
-  React.PropsWithChildren & {
+  type FCClass<P = object> = React.FC<P & React.PropsWithChildren & {
     className?: string
-  }
-  >;
+  }>;
 
   interface WindowEventMap {
     modalOpen: CustomEvent
@@ -15,6 +12,7 @@ declare global {
   }
 
   interface Window {
+    animationObserver?: IntersectionObserver
     localeInst?: Localization
     YT?: any
     onYouTubeIframeAPIReady?: () => void

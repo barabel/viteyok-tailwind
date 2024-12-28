@@ -1,18 +1,26 @@
 import { createRoot } from 'react-dom/client';
-import { Popups as ReactPopups } from './ui/popups';
-import { Localization } from '@/shared/lib/localization';
-import { LocaleContext } from './store/localization';
+import { Popups } from './ui/popups';
+import { Localization } from '@/shared/helpers/localization';
+import { LocaleContext } from './config';
 
-export const initPopup = (parent: HTMLElement): void => {
-  parent.innerHTML = '';
-  const popupsRoot = createRoot(parent);
-  popupsRoot.render(<ReactPopups />);
+export class InitPopups {
+  constructor() {
+    const popups = document.getElementById('popups');
 
-  const instLocale = new Localization();
+    if (popups) {
+      this.renderPopups(popups);
+    }
+  }
 
-  popupsRoot.render(
-    <LocaleContext.Provider value={instLocale}>
-      <ReactPopups />
-    </LocaleContext.Provider>,
-  );
+  renderPopups(popups: HTMLElement): void {
+    popups.innerHTML = '';
+    const instLocale = new Localization();
+    const popupsRoot = createRoot(popups);
+
+    popupsRoot.render(
+      <LocaleContext.Provider value={instLocale}>
+        <Popups />
+      </LocaleContext.Provider>,
+    );
+  }
 }
