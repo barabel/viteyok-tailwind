@@ -3,7 +3,7 @@ import vituum from 'vituum';
 import twig from '@vituum/vite-plugin-twig';
 import path from 'node:path';
 import IconSpritePlugin from './plugins/vite-plugin-icon-sprite';
-import { getFileName, getGlobalData, twigJSParams } from './app';
+import { getFileName, twigJSParams } from './app';
 import twigToJS from 'vite-plugin-twig-drupal';
 import tailwindcss from '@vituum/vite-plugin-tailwindcss';
 
@@ -24,7 +24,6 @@ export default defineConfig(({ mode }) => {
         root: './src',
         reload: true,
         useSeparateData: true,
-        globals: getGlobalData(),
         ...twigJSParams,
       }),
       IconSpritePlugin(),
@@ -36,6 +35,7 @@ export default defineConfig(({ mode }) => {
     publicDir: 'static',
     server: {
       port: 3000,
+      host: true,
       proxy: {
         '/api': `http://localhost:${env.VITE_PORT ?? 3065}`,
       },

@@ -71,12 +71,6 @@ function getTwigFiles(directory: string) {
 
 const listHtml = getTwigFiles(path.join(process.cwd(), 'src', 'views'));
 
-const getGlobalData = () => {
-  const fileData = fs.readFileSync(`./src/data/common.json`);
-
-  return { ...JSON.parse(`${fileData}`) }
-}
-
 const twigJSParams = {
   namespaces: {
     'view-root': path.resolve(process.cwd(), 'src/views/partials'),
@@ -88,4 +82,4 @@ const twigJSParams = {
   },
 }
 
-export { getFileName, getGlobalData, twigJSParams };
+export { getFileName, twigJSParams };
