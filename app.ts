@@ -82,4 +82,34 @@ const twigJSParams = {
   },
 }
 
-export { getFileName, twigJSParams };
+const transformTwigJSParamsForTwigToJs = (twigJSParams: Record<string, any>) => {
+  const filtersInc: Record<string, () => any> | undefined = twigJSParams.filters;
+  const functionsInc: Record<string, () => any> | undefined = twigJSParams.functions;
+
+  const filters = {};
+  if (filtersInc) {
+    Object.entries(filtersInc).forEach(([key, value]) => {
+      filters[key] = `(twigInstance) => twigInstance.extendFilter("${key}", ${value})`;
+    });
+  }
+
+  const functions = {};
+  if (functionsInc) {
+    Object.entries(functionsInc).forEach(([key, value]) => {
+      filters[key] = `(twigInstance) => twigInstance.extendFunction("${key}", ${value})`;
+    });
+  }
+
+  return {
+    ...twigJSParams,
+    functions: {
+      ...filters,
+      ...functions,
+    },
+  }
+}
+
+
+const twigJSParamsForTwigToJS = transformTwigJSParamsForTwigToJs(twigJSParams);
+
+export { getFileName, twigJSParams, twigJSParamsForTwigToJS };
