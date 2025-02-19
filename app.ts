@@ -96,7 +96,7 @@ const transformTwigJSParamsForTwigToJs = (twigJSParams: Record<string, any>) => 
   const functions = {};
   if (functionsInc) {
     Object.entries(functionsInc).forEach(([key, value]) => {
-      filters[key] = `(twigInstance) => twigInstance.extendFunction("${key}", ${value})`;
+      functions[key] = `(twigInstance) => twigInstance.extendFunction("${key}", ${value})`;
     });
   }
 
