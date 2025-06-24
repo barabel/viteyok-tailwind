@@ -1,0 +1,101 @@
+@use 'tailwindcss';
+@use './lib/index.scss' as *;
+@use './typography.scss';
+
+@theme {
+  --breakpoint-m: 375px;
+  --breakpoint-t: 768px;
+  --breakpoint-md: 1024px;
+  --breakpoint-d: 1280px;
+  --breakpoint-xl: 1440px;
+  --breakpoint-xxl: 1600px;
+
+  --z-header: 6666;
+  --z-popup: 9999;
+
+  --color-beige-100: #fdfbf2;
+  --color-beige-200: #fbf6e5;
+
+  --color-black-100: #232323;
+  --color-black-100-40: #00000066;
+  --color-black-100-50: #00000080;
+  --color-black-100-60: #23232399;
+  --color-black-100-70: #2323234c;
+  --color-black-100-80: #232323cc;
+  --color-black-200-30: #0000004d;
+
+  --color-blue-100: #f0f5f8;
+  --color-blue-200: #cde2ef;
+  --color-blue-300: #033e5e;
+  --color-blue-300-08: #033e5e14;
+  --color-blue-300-20: #033e5e33;
+  --color-blue-300-50: #033e5e80;
+  --color-blue-300-80: #033e5ecc;
+
+  --color-gray-100: #e8e8e8;
+  --color-gray-200: #aaaaab;
+  --color-gray-300: #8f8f8f;
+
+  --color-gold-100: #a78e3c;
+  --color-gold-100-30: #a78e3c4d;
+  --color-gold-100-80: #a78e3ccc;
+  --color-gold-200: #bda75d;
+
+  --color-green-100: #edf5ea;
+  --color-green-200: #d6e9ce;
+  --color-green-300: #4d773b;
+  --color-green-300-80: #4d773bcc;
+  --color-green-400: #41712c;
+
+  --color-orange-100: #fff7f0;
+  --color-orange-200: #f8eade;
+  --color-orange-300: #f99a41;
+  --color-orange-400: #f08929;
+
+  --color-white-100: #ffffff;
+  --color-white-100-20: #ffffff33;
+  --color-white-100-50: #ffffff80;
+  --color-white-100-80: #ffffffcc;
+  --color-white-100-90: #ffffff19;
+
+  --color-red-100: #ff1212;
+
+  --animate-fadeIn: fadeIn 0.5s ease-in-out;
+  --animate-loader: loader 1s linear infinite alternate;
+  --animate-marquee: marquee 45s linear infinite;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+
+  @keyframes loader {
+    0% {
+      box-shadow: -38px -12px, -14px 0, 14px 0, 38px 0;
+    }
+    33% {
+      box-shadow: -38px 0px, -14px -12px, 14px 0, 38px 0;
+    }
+    66% {
+      box-shadow: -38px 0px, -14px 0, 14px -12px, 38px 0;
+    }
+    100% {
+      box-shadow: -38px 0, -14px 0, 14px 0, 38px -12px;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - rem(40)));
+    }
+  }
+}

@@ -1,0 +1,37 @@
+@use './lib/index.scss' as *;
+
+@layer base {
+  picture {
+    object-fit: cover;
+
+    &, img {
+      display: block;
+      height: 100%;
+    }
+
+    img {
+      object-fit: inherit;
+      object-position: inherit;
+    }
+  }
+
+  img {
+    object-fit: cover;
+    height: 100%;
+  }
+}
+
+@layer utilities {
+  .custom-container {
+    max-width: 100%;
+    padding-inline: --spacing(4);
+
+    @include min-media('t') {
+      padding-inline: --spacing(12);
+    }
+
+    @include min-media('d') {
+      padding-inline: --spacing(18);
+    }
+  }
+}

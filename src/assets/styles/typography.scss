@@ -1,0 +1,53 @@
+@use './lib/index.scss' as *;
+
+@font-face {
+  font-family: 'HelveticaMedium';
+  src: url('../fonts/HelveticaMedium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HelveticaRegular';
+  src: url('../fonts/HelveticaRegular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@theme {
+  --font-helvetica-medium: 'HelveticaMedium', sans-serif;
+  --font-helvetica-regular: 'HelveticaRegular', sans-serif;
+}
+
+@layer components {
+  .h {
+    &1 {
+      font-family: var(--font-helvetica-medium);
+      line-height: 110%;
+      font-size: #{rem(28)};
+      letter-spacing: 0.03em;
+
+      @include min-media('t') {
+        font-size: #{rem(30)};
+      }
+
+      @include min-media('d') {
+        line-height: 120%;
+        font-size: #{rem(48)};
+      }
+    }
+  }
+
+  .t {
+    &1 {
+      font-family: var(--font-helvetica-regular);
+      line-height: 124%;
+      font-size: #{rem(16)};
+      letter-spacing: 0.03em;
+
+      @include min-media('d') {
+        line-height: 140%;
+      }
+    }
+  }
+}

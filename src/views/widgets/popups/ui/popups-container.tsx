@@ -4,7 +4,7 @@ import type { TPopupChild } from '@/shared/lib/popups/types';
 
 enum VariantsStyles {
   hidden = 'invisible opacity-0 pointer-events-none',
-  appearing = 'visible opacity-1 pointer-events-auto *:translate-x-0',
+  appearing = 'visible opacity-100 pointer-events-auto *:translate-x-0',
 }
 
 export interface TPopupsContainer {
@@ -70,13 +70,13 @@ export const PopupsContainer: FCClass<TPopupsContainer> = ({
   }, [closeCurrentPopup])
 
   return (
-    <div ref={popups} className={cn('fixed inset-0 h-dvh bg-black-100-60 flex flex-col z-popup ' +
-      'justify-center items-center  pointer-events-none t:p-16 transition', {
+    <div ref={popups} className={cn('fixed inset-0 h-dvh bg-black-100-60 flex flex-col',
+      'justify-center items-center t:p-16 transition', {
       [VariantsStyles.hidden]: !isAppearing,
       [VariantsStyles.appearing]: isAppearing,
     })} onClick={closeByOverlayClick}>
-      <div className={'w-fit bg-white-100 relative z-1 translate-x-full ' +
-        't:flex t:items-center t:justify-center t:bg-transparent t:transform-none'}>
+      <div className={cn('w-full h-full relative z-(--z-popup) translate-x-full',
+        't:flex t:items-center t:justify-center t:bg-transparent t:transform-none')}>
         <Suspense fallback={<></>}>
           <LazyPopup
             closePopup={closeCurrentPopup}
