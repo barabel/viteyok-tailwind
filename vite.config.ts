@@ -1,11 +1,11 @@
 import { defineConfig, loadEnv } from 'vite';
 import vituum from 'vituum';
 import twig from '@vituum/vite-plugin-twig';
+import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
 import IconSpritePlugin from './plugins/vite-plugin-icon-sprite';
 import { getFileName, twigJSParams, twigJSParamsForTwigToJS } from './app';
 import twigToJS from 'vite-plugin-twig-drupal';
-import tailwindcss from '@vituum/vite-plugin-tailwindcss';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
